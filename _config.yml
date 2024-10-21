@@ -3,18 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo Template
+title: fzh879's blog
 subtitle: ''
 description: ''
 keywords:
-author: JiJi
+author: fzh
 language: en
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: https://jiji.pro/hexo-template
-permalink: :title/
+permalink: :title/fzh879.github.io
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -104,4 +104,3 @@ theme: landscape
 deploy:
   type: ''
 
-root: /hexo-template
