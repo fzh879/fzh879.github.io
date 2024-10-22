@@ -9,21 +9,21 @@
   <meta name="description" content="A fast, simple &amp; powerful blog framework, powered by Node.js. Here is the template of it.  Demo | Official Website | Documentation | GitHub CI&#x2F;CDThis repository uses GitHub Actions for CI&amp;#x">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo Template">
-<meta property="og:url" content="https://jiji.pro/hexo-template/hello-template/fzh879.github.io">
+<meta property="og:url" content="https://www.fzh879.github.io.com/blog/hello-template/fzh879.github.io">
 <meta property="og:site_name" content="fzh879&#39;s blog">
 <meta property="og:description" content="A fast, simple &amp; powerful blog framework, powered by Node.js. Here is the template of it.  Demo | Official Website | Documentation | GitHub CI&#x2F;CDThis repository uses GitHub Actions for CI&amp;#x">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
-<meta property="article:published_time" content="2024-10-21T15:18:21.154Z">
-<meta property="article:modified_time" content="2024-10-21T15:18:21.154Z">
+<meta property="article:published_time" content="2024-10-22T07:38:24.618Z">
+<meta property="article:modified_time" content="2024-10-22T07:38:24.618Z">
 <meta property="article:author" content="fzh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
   
-    <link rel="alternate" href="/hexo-template/atom.xml" title="fzh879's blog" type="application/atom+xml">
+    <link rel="alternate" href="/blog/atom.xml" title="fzh879's blog" type="application/atom+xml">
   
   
-    <link rel="shortcut icon" href="/hexo-template/favicon.png">
+    <link rel="shortcut icon" href="/blog/favicon.png">
   
   
     
@@ -31,11 +31,11 @@
 
   
   
-<link rel="stylesheet" href="/hexo-template/css/style.css">
+<link rel="stylesheet" href="/blog/css/style.css">
 
   
     
-<link rel="stylesheet" href="/hexo-template/fancybox/jquery.fancybox.min.css">
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.min.css">
 
   
   
@@ -49,7 +49,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/hexo-template/" id="logo">fzh879&#39;s blog</a>
+        <a href="/blog/" id="logo">fzh879&#39;s blog</a>
       </h1>
       
     </div>
@@ -57,20 +57,20 @@
       <nav id="main-nav">
         <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
         
-          <a class="main-nav-link" href="/hexo-template/">Home</a>
+          <a class="main-nav-link" href="/blog/">Home</a>
         
-          <a class="main-nav-link" href="/hexo-template/archives">Archives</a>
+          <a class="main-nav-link" href="/blog/archives">Archives</a>
         
       </nav>
       <nav id="sub-nav">
         
         
-          <a class="nav-icon" href="/hexo-template/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+          <a class="nav-icon" href="/blog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
         
         <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://jiji.pro/hexo-template"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://www.fzh879.github.io.com/blog"></form>
       </div>
     </div>
   </div>
@@ -79,8 +79,8 @@
       <div class="outer">
         <section id="main"><article id="post-hello-template" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
-    <a href="/hexo-template/hello-template/fzh879.github.io" class="article-date">
-  <time class="dt-published" datetime="2024-10-21T15:18:21.154Z" itemprop="datePublished">2024-10-21</time>
+    <a href="/blog/hello-template/fzh879.github.io" class="article-date">
+  <time class="dt-published" datetime="2024-10-22T07:38:24.618Z" itemprop="datePublished">2024-10-22</time>
 </a>
     
   </div>
@@ -152,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://jiji.pro/hexo-template/hello-template/fzh879.github.io" data-id="cm2j5vu3s0000e9ot78r0986d" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://www.fzh879.github.io.com/blog/hello-template/fzh879.github.io" data-id="cm2k4w2o50000ecoxa44w0ygr" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -180,7 +180,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/hexo-template/archives/2024/10/">October 2024</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2024/10/">October 2024</a></li></ul>
     </div>
   </div>
 
@@ -193,7 +193,7 @@
       <ul>
         
           <li>
-            <a href="/hexo-template/hello-template/fzh879.github.io">Hexo Template</a>
+            <a href="/blog/hello-template/fzh879.github.io">Hexo Template</a>
           </li>
         
       </ul>
@@ -218,25 +218,25 @@
     </div>
     <nav id="mobile-nav">
   
-    <a href="/hexo-template/" class="mobile-nav-link">Home</a>
+    <a href="/blog/" class="mobile-nav-link">Home</a>
   
-    <a href="/hexo-template/archives" class="mobile-nav-link">Archives</a>
+    <a href="/blog/archives" class="mobile-nav-link">Archives</a>
   
 </nav>
     
 
 
-<script src="/hexo-template/js/jquery-3.6.4.min.js"></script>
+<script src="/blog/js/jquery-3.6.4.min.js"></script>
 
 
 
   
-<script src="/hexo-template/fancybox/jquery.fancybox.min.js"></script>
+<script src="/blog/fancybox/jquery.fancybox.min.js"></script>
 
 
 
 
-<script src="/hexo-template/js/script.js"></script>
+<script src="/blog/js/script.js"></script>
 
 
 
