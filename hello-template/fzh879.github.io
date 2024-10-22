@@ -4,23 +4,23 @@
   <meta charset="utf-8">
   
   
-  <title>Hexo Template | fzh879&#39;s blog</title>
+  <title>Hexo Template | shadow&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="A fast, simple &amp; powerful blog framework, powered by Node.js. Here is the template of it.  Demo | Official Website | Documentation | GitHub CI&#x2F;CDThis repository uses GitHub Actions for CI&amp;#x">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo Template">
 <meta property="og:url" content="https://fzh879.github.io/hello-template/fzh879.github.io">
-<meta property="og:site_name" content="fzh879&#39;s blog">
+<meta property="og:site_name" content="shadow&#39;s blog">
 <meta property="og:description" content="A fast, simple &amp; powerful blog framework, powered by Node.js. Here is the template of it.  Demo | Official Website | Documentation | GitHub CI&#x2F;CDThis repository uses GitHub Actions for CI&amp;#x">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
-<meta property="article:published_time" content="2024-10-22T07:42:31.532Z">
-<meta property="article:modified_time" content="2024-10-22T07:42:31.532Z">
+<meta property="article:published_time" content="2024-10-22T07:53:00.861Z">
+<meta property="article:modified_time" content="2024-10-22T07:53:00.861Z">
 <meta property="article:author" content="fzh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
   
-    <link rel="alternate" href="/atom.xml" title="fzh879's blog" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="shadow's blog" type="application/atom+xml">
   
   
     <link rel="shortcut icon" href="/favicon.png">
@@ -49,7 +49,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">fzh879&#39;s blog</a>
+        <a href="/" id="logo">shadow&#39;s blog</a>
       </h1>
       
     </div>
@@ -80,7 +80,7 @@
         <section id="main"><article id="post-hello-template" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/hello-template/fzh879.github.io" class="article-date">
-  <time class="dt-published" datetime="2024-10-22T07:42:31.532Z" itemprop="datePublished">2024-10-22</time>
+  <time class="dt-published" datetime="2024-10-22T07:53:00.861Z" itemprop="datePublished">2024-10-22</time>
 </a>
     
   </div>
@@ -152,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fzh879.github.io/hello-template/fzh879.github.io" data-id="cm2k51efx0000dxq2a2nec7hq" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://fzh879.github.io/hello-template/fzh879.github.io" data-id="cm2k5eud90000dqq80khh5v2b" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
