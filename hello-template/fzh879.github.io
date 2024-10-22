@@ -14,8 +14,8 @@
 <meta property="og:description" content="A fast, simple &amp; powerful blog framework, powered by Node.js. Here is the template of it.  Demo | Official Website | Documentation | GitHub CI&#x2F;CDThis repository uses GitHub Actions for CI&amp;#x">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
-<meta property="article:published_time" content="2024-10-22T07:38:24.618Z">
-<meta property="article:modified_time" content="2024-10-22T07:38:24.618Z">
+<meta property="article:published_time" content="2024-10-22T07:39:36.963Z">
+<meta property="article:modified_time" content="2024-10-22T07:39:36.963Z">
 <meta property="article:author" content="fzh">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhexojs%2Fhexo.svg?type=large">
@@ -80,7 +80,7 @@
         <section id="main"><article id="post-hello-template" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/blog/hello-template/fzh879.github.io" class="article-date">
-  <time class="dt-published" datetime="2024-10-22T07:38:24.618Z" itemprop="datePublished">2024-10-22</time>
+  <time class="dt-published" datetime="2024-10-22T07:39:36.963Z" itemprop="datePublished">2024-10-22</time>
 </a>
     
   </div>
@@ -152,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://www.fzh879.github.io.com/blog/hello-template/fzh879.github.io" data-id="cm2k4w2o50000ecoxa44w0ygr" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://www.fzh879.github.io.com/blog/hello-template/fzh879.github.io" data-id="cm2k4xlt60000gaqcdup8agu6" data-title="Hexo Template" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
