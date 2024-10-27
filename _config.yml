@@ -60,7 +60,7 @@ prismjs:
 # path: Root path for your blogs index page. (default = '')
 # per_page: Posts displayed per page. (0 = disable pagination)
 # order_by: Posts order. (Order by date descending by default)
-index_generator:
+index_generator: https://i0.hdslb.com/bfs/article/b7dd67e1ff0a081af5cbbce5a9ee7ee9354561434.jpg
   path: ''
   per_page: 10
   order_by: -date
