@@ -65,7 +65,7 @@ disable_top_img: false
 default_top_img:
 
 # The banner image of index page
-index_img: https://i0.hdslb.com/bfs/article/b7dd67e1ff0a081af5cbbce5a9ee7ee9354561434.jpg
+index_img:  https://i0.hdslb.com/bfs/article/b7dd67e1ff0a081af5cbbce5a9ee7ee9354561434.jpg
 
 # The banner image of archive page
 archive_img:
