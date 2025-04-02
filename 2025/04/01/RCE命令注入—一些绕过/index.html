@@ -1,0 +1,453 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>分享的乐趣 | 分享的乐趣</title><meta name="author" content="fzh"><meta name="copyright" content="fzh"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="RCE命令注入—一些绕过RCE（Remote Code&#x2F;Command Execution） 制表符:\t   换行符:\n 基础绕过1.空格绕过产生的原因:在许多编程语言、命令行界面或应用程序中，空格通常被用作分隔命令、参数和函数的重要字符,所以为了防止信息泄露就会将空格禁用，防止命令被执行。 方法：所以为了执行这些命令，就需要一些制表符、换行符等特殊字符替代空格。 1.大括号扩展{}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分享的乐趣">
+<meta property="og:url" content="http://example.com/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/index.html">
+<meta property="og:site_name" content="分享的乐趣">
+<meta property="og:description" content="RCE命令注入—一些绕过RCE（Remote Code&#x2F;Command Execution） 制表符:\t   换行符:\n 基础绕过1.空格绕过产生的原因:在许多编程语言、命令行界面或应用程序中，空格通常被用作分隔命令、参数和函数的重要字符,所以为了防止信息泄露就会将空格禁用，防止命令被执行。 方法：所以为了执行这些命令，就需要一些制表符、换行符等特殊字符替代空格。 1.大括号扩展{}">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-04-01T11:48:48.709Z">
+<meta property="article:modified_time" content="2025-04-01T11:48:48.805Z">
+<meta property="article:author" content="fzh">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "http://example.com/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2025-04-01T11:48:48.709Z",
+  "dateModified": "2025-04-01T11:48:48.805Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "fzh",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '分享的乐趣',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(url(https://img.3dmgame.com/uploads/images/news/20220819/1660894183_272932.jpg));"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/friends/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">分享的乐趣</span></a><a class="nav-page-title" href="/"><span class="site-name">分享的乐趣</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/friends/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Untitled</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-04-01T11:48:48.709Z" title="Created 2025-04-01 19:48:48">2025-04-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-04-01T11:48:48.805Z" title="Updated 2025-04-01 19:48:48">2025-04-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="RCE命令注入—一些绕过"><a href="#RCE命令注入—一些绕过" class="headerlink" title="RCE命令注入—一些绕过"></a>RCE命令注入—一些绕过</h1><p>RCE（Remote Code&#x2F;Command Execution）</p>
+<p>制表符:\t   换行符:\n</p>
+<h3 id="基础绕过"><a href="#基础绕过" class="headerlink" title="基础绕过"></a>基础绕过</h3><h4 id="1-空格绕过"><a href="#1-空格绕过" class="headerlink" title="1.空格绕过"></a>1.空格绕过</h4><p>产生的原因:在许多编程语言、命令行界面或应用程序中，空格通常被用作分隔命令、参数和函数的重要字符,所以为了防止信息泄露就会将空格禁用，防止命令被执行。</p>
+<p>方法：所以为了执行这些命令，就需要一些制表符、换行符等特殊字符替代空格。</p>
+<h5 id="1-大括号扩展"><a href="#1-大括号扩展" class="headerlink" title="1.大括号扩展{}"></a>1.大括号扩展{}</h5><p>基本语法：{item1,item2…..},</p>
+<p>原理：在 Linux 系统的 Bash 等 shell 中，大括号扩展是一种强大的特性，它允许你生成多个字符串组合，也就是shell会将其扩展为多个由逗号分隔的项，例如：echo {a,b,c}会扩展为echo a b c.</p>
+<h5 id="2-IFS代替空格（-IF-9-IFS-IFS这三都可以）"><a href="#2-IFS代替空格（-IF-9-IFS-IFS这三都可以）" class="headerlink" title="2.$IFS代替空格（$IF$9,${IFS},$IFS这三都可以）"></a>2.$IFS代替空格（$IF$9,${IFS},$IFS这三都可以）</h5><p>$IFS 即内部字段分隔符（Internal Field Separator），在 shell 里，它是一个环境变量，用来界定单词的边界。默认情况下，<code>$IFS</code> 包含空格、制表符和换行符，也就是说，shell 在解析命令行参数时，会把这些字符(就是指空格、换行符、制表符)当作分隔符来区分不同的参数。</p>
+<p>原理: <code>$IFS</code> 可以实现参数分隔。因为 shell 会把 <code>$IFS</code> 代表的字符视为分隔符 <code>$9</code>是当前命令的第9个参数，通常为空</p>
+<p>基本格式:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat$IFS/etc/passwd</span><br><span class="line">cat$&#123;IFS&#125;flag </span><br><span class="line">cat$IFS$9flag</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-重定向字符"><a href="#3-重定向字符" class="headerlink" title="3.重定向字符&lt;(输入重定向)  &lt;&gt;(读写重定向)"></a>3.重定向字符&lt;(输入重定向)  &lt;&gt;(读写重定向)</h5><p>原理:可替代空格起到分隔作用</p>
+<p>基本格式:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat&lt;/etc/passwd//cat /etc/passwd</span><br><span class="line"></span><br><span class="line">cat&lt;&gt;/etc/passwd</span><br><span class="line"></span><br><span class="line">ls;cat flag</span><br></pre></td></tr></table></figure>
+
+<h5 id="4-09绕过（相当于Tab键）"><a href="#4-09绕过（相当于Tab键）" class="headerlink" title="4.%09绕过（相当于Tab键）"></a>4.%09绕过（相当于Tab键）</h5><p>原理:在 URL 编码里，<code>%09</code> 代表的是制表符（Tab)在操作语言中被视为空格，所以可与进行绕过</p>
+<h4 id="2-绕过黑名单"><a href="#2-绕过黑名单" class="headerlink" title="2.绕过黑名单"></a>2.绕过黑名单</h4><h5 id="1-大小写绕过"><a href="#1-大小写绕过" class="headerlink" title="1.大小写绕过"></a>1.大小写绕过</h5><p>原理：部分黑名单的过滤规则可能只对特定大小写的关键字进行匹配，攻击者可以通过改变关键字的大小写来绕过过滤</p>
+<h5 id="2-拼接绕过"><a href="#2-拼接绕过" class="headerlink" title="2.拼接绕过"></a>2.拼接绕过</h5><p>原理：将被黑名单禁止的关键字拆分成多个部分，然后在代码执行时再进行拼接，这样在过滤阶段不会被识别为完整的危险关键字</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a=f b=lag</span><br><span class="line">cat $a$b//cat flag</span><br><span class="line"></span><br><span class="line">未初始化的变量，等价于null</span><br><span class="line">ca$&#123;u&#125;t f$&#123;u&#125;lag//cat flag</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-编码绕过"><a href="#3-编码绕过" class="headerlink" title="3.编码绕过"></a>3.编码绕过</h5><p>原理：使用各种编码方式对危险关键字进行编码，在执行时再进行解码，绕过基于明文匹配的黑名单过滤。</p>
+<p>如：进行base64、url编码等来对关键字进行编码</p>
+<h5 id="4-单引号绕过"><a href="#4-单引号绕过" class="headerlink" title="4.单引号绕过"></a>4.单引号绕过</h5><p>原理：单引号可以将其中的内容原样输出，不会对特殊字符进行解析。在绕过黑名单时，如果黑名单只对特定上下文中的关键字进行过滤，使用单引号可以避免关键字被误识别</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w&#x27;h&#x27;o&#x27;am&#x27;i</span><br><span class="line">wh&#x27;&#x27;oami   //whoami</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-双引号绕过"><a href="#5-双引号绕过" class="headerlink" title="5.双引号绕过"></a>5.双引号绕过</h5><p>原理：双引号内的变量会被解析，但特殊字符如单引号、反引号等会被保留。可以利用双引号对变量和命令进行组合，绕过对完整关键字的匹配（也就是在双引号中可以有参数但在单引号中不可以）</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">w&quot;h&quot;o&quot;am&quot;i</span><br><span class="line">wh&quot;&quot;oami</span><br><span class="line"></span><br><span class="line">$part1 = &quot;f&quot;;</span><br><span class="line">$part2 = &quot;alg&quot;;</span><br><span class="line">$func = &quot;$part1$part2&quot;;//最后都是flag </span><br></pre></td></tr></table></figure>
+
+<h5 id="6-反斜线绕过-转义危险字符"><a href="#6-反斜线绕过-转义危险字符" class="headerlink" title="6.反斜线绕过(\转义危险字符)"></a>6.反斜线绕过(\转义危险字符)</h5><p>原理:它可以让紧跟其后的特殊字符失去原本的特殊含义，变成普通字符。当黑名单针对某些特殊字符进行过滤时，攻击者能够用反斜线对这些字符进行转义，使命令在形式上绕过过滤</p>
+<p>示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c\at /et\c/passwd//最后为<span class="built_in">cat</span>/passwd</span><br></pre></td></tr></table></figure>
+
+<h5 id="6-反引号-绕过"><a href="#6-反引号-绕过" class="headerlink" title="6.反引号&#96;绕过"></a>6.反引号&#96;绕过</h5><p>原理:如果目标系统的黑名单对某些完整的命令或关键字进行过滤，攻击者可以使用反引号将命令拆分成多个部分，从而绕过过滤</p>
+<p>示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`<span class="built_in">echo</span> c`at /etc/passwd /etc/passwd   //echo <span class="built_in">cat</span>/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h5 id="7-位置参数的特殊变量-和"><a href="#7-位置参数的特殊变量-和" class="headerlink" title="7.位置参数的特殊变量$@和$*"></a>7.位置参数的特殊变量<code>$@</code>和<code>$*</code></h5><p>原理:<code>$@</code>和<code>$*</code>代表全部的位置参数，当没有位置参数时，扩展为空</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f$@lag  //flag</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-目录分隔符-过滤绕过"><a href="#3-目录分隔符-过滤绕过" class="headerlink" title="3.目录分隔符( &#x2F; )过滤绕过"></a>3.目录分隔符( &#x2F; )过滤绕过</h4><h5 id="1-直接使用分号"><a href="#1-直接使用分号" class="headerlink" title="1.直接使用分号;"></a>1.直接使用分号;</h5><p>在这里分号没有替代&#x2F;只是起到了一个分隔不同的命令，使得多个命令可以在同一行中依次执行，无法像&#x2F;一样表示层级关系</p>
+<h5 id="2-当-被过滤时可以尝试使用编码进行绕过"><a href="#2-当-被过滤时可以尝试使用编码进行绕过" class="headerlink" title="2.当&#x2F;被过滤时可以尝试使用编码进行绕过"></a>2.当&#x2F;被过滤时可以尝试使用编码进行绕过</h5><p>原理:过滤&#x2F;可能就是明文被过滤了，然后我们可以使用编码来绕过，通过过滤后服务器会解码会。</p>
+<p>通常使用url、base64、十六进制进行编码（原因就是这些时服务器常见数据传输方式、服务器可以识别出如果是一些不常见的就不行了）</p>
+<p>示例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat html%2Ffalg</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-cat-HOME-0-1-etc-HOME-0-1-passwd"><a href="#3-cat-HOME-0-1-etc-HOME-0-1-passwd" class="headerlink" title="3.cat ${HOME:0:1}etc${HOME:0:1}passwd"></a>3.cat ${HOME:0:1}etc${HOME:0:1}passwd</h5><p>原理:</p>
+<p><strong>环境变量 <code>$HOME</code></strong>：在 Linux 或类 Unix 系统中，<code>$HOME</code> 是一个预定义的环境变量，它存储着当前用户的主目录路径</p>
+<p><strong>变量子串提取</strong>：<code>$&#123;HOME:0:1&#125;</code> 是 shell 变量的子串提取操作。这种操作的通用格式是 <code>$&#123;variable:start:length&#125;</code>，意思是从变量 <code>variable</code> 的第 <code>start</code> 个字符开始，提取长度为 <code>length</code> 的子串。这里 <code>start</code> 为 0（索引从 0 开始），<code>length</code> 为 1，也就是提取 <code>$HOME</code> 变量值的第一个字符。由于主目录路径以 <code>/</code> 开头，所以 <code>$&#123;HOME:0:1&#125;</code> 的结果就是 <code>/</code></p>
+<h5 id="4-cat-echo-tr-0-1-etc-echo-tr-0-1-passwd-cat-ect-passwd"><a href="#4-cat-echo-tr-0-1-etc-echo-tr-0-1-passwd-cat-ect-passwd" class="headerlink" title="4.cat $(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)etc$(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)passwd      &#x2F;&#x2F;cat  &#x2F;ect&#x2F;passwd"></a>4.<code>cat $(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)etc$(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)passwd </code>     &#x2F;&#x2F;cat  &#x2F;ect&#x2F;passwd</h5><p>原理:</p>
+<p><strong><code>$(...)</code> 语法</strong>：<code>$(...)</code> 是 shell 中的命令替换语法，它会先执行括号内的命令，然后将命令的输出结果替换到原命令中的相应位置</p>
+<p><strong><code>tr</code> 命令</strong>：<code>tr</code> 命令用于对输入字符进行替换操作，其格式为 <code>tr set1 set2</code>，会把输入中属于 <code>set1</code> 集合的字符替换为 <code>set2</code> 集合中对应位置的字符。<code>tr &#39;!-0&#39; &#39;&quot;-1&#39;</code> 表示将输入中从 <code>!</code> 到 <code>0</code> 这个范围内的字符替换为从 <code>&quot;</code> 到 <code>1</code> 对应位置的字符。在 ASCII 码表中，<code>.</code> 位于 <code>!</code> 到 <code>0</code> 范围内，会被替换为 <code>/</code>(tr命令默认基于 ASCII 编码体系来确定字符范围比如：a-z,那么范围就是97-122)</p>
+<p><img src="https://gitee.com/wxy-2005/picture/raw/master/image-20250331144943441.png" alt="image-20250331144943441"></p>
+<h3 id="绕过管道符"><a href="#绕过管道符" class="headerlink" title="绕过管道符|"></a>绕过管道符<code>|</code></h3><p>方法:bash&lt;&lt;&lt;$(base64 -d&lt;&lt;&lt;Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw&#x3D;&#x3D;)</p>
+<h4 id="1"><a href="#1" class="headerlink" title="1. &lt;&lt;&lt; 操作符"></a>1. <code>&lt;&lt;&lt;</code> 操作符</h4><p>在 Bash 中，<code>&lt;&lt;&lt;</code> 是 Here 字符串操作符，它的作用是把一个字符串作为标准输入传递给命令。例如，<code>command &lt;&lt;&lt; &quot;input_string&quot;</code> 会将 <code>&quot;input_string&quot;</code> 作为标准输入传递给 <code>command</code> 命令。</p>
+<h4 id="2-base64-d-命令"><a href="#2-base64-d-命令" class="headerlink" title="2. base64 -d 命令"></a>2. <code>base64 -d</code> 命令</h4><p><code>base64 -d</code> 用于对 Base64 编码的字符串进行解码。<code>base64 -d&lt;&lt;&lt;Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==</code> 这部分会对 <code>Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==</code> 进行 Base64 解码。</p>
+<p>对 <code>Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==</code> 进行解码后得到的字符串是 <code>cat /etc/passwd | grep 33</code>。</p>
+<h4 id="3-bash-命令"><a href="#3-bash-命令" class="headerlink" title="3. bash 命令"></a>3. <code>bash</code> 命令</h4><p>最后，<code>bash&lt;&lt;&lt;</code> 会把解码后的字符串 <code>cat /etc/passwd | grep 33</code> 作为标准输入传递给 <code>bash</code> 执行。<code>cat /etc/passwd | grep 33</code> 这个命令的功能是读取 <code>/etc/passwd</code> 文件的内容，然后使用 <code>grep</code> 命令过滤出包含 <code>33</code> 的行。</p>
+<p>在题目不是很严格的情况下可以直接<code>|</code>进行编码即可</p>
+<table>
+<thead>
+<tr>
+<th>;</th>
+<th><code>whoami;ls</code></th>
+<th>命令的结束符，允许一行多个命令从左到右顺序执行，所有命令都会执行。Windows系统下命令提示符<code>cmd</code>无此语法。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;&amp;</td>
+<td><code>whoami&amp;&amp;ls</code></td>
+<td>逻辑与，只有第一条命令成功执行，才会执行第二条命令。</td>
+</tr>
+<tr>
+<td>||</td>
+<td>&#96;whoami</td>
+<td></td>
+</tr>
+<tr>
+<td>|</td>
+<td></td>
+<td>管道符，两个命令都执行，第一条命令的输出作为第二条命令的输入，第一条命令的输出不显示。</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td></td>
+<td>后台执行，两个命令同时执行。</td>
+</tr>
+<tr>
+<td>%0A</td>
+<td></td>
+<td>PHP环境下使用。</td>
+</tr>
+</tbody></table>
+<p>在|被过滤时也可以使用其他的命令分隔符比如说时这个;就是让命令依次执行来达到目的</p>
+<h1 id="代码执行与命令执行的区别和联系"><a href="#代码执行与命令执行的区别和联系" class="headerlink" title="代码执行与命令执行的区别和联系"></a>代码执行与命令执行的区别和联系</h1><ul>
+<li><strong>代码执行</strong>：通常指的是在特定的编程语言环境中，运行一段程序代码。代码可以是高级语言（如 Python、Java、C++ 等）编写的程序，这些代码需要经过编译（对于编译型语言）或者解释（对于解释型语言）才能被计算机理解和执行。代码执行侧重于程序逻辑的实现和算法的运行。</li>
+<li><strong>命令执行</strong>：一般是指在操作系统的命令行界面中，执行特定的系统命令。这些命令是操作系统提供的，用于完成各种系统管理任务，如文件操作、进程管理、网络配置等。命令执行更侧重于对系统资源的直接操作和管理。</li>
+</ul>
+<h4 id="执行环境"><a href="#执行环境" class="headerlink" title="执行环境"></a>执行环境</h4><ul>
+<li><strong>代码执行</strong>：需要相应的编程语言运行环境。例如，Python 代码需要 Python 解释器，Java 代码需要 Java 虚拟机（JVM）。代码执行通常在应用程序的上下文中进行，由应用程序调用代码来完成特定的功能。</li>
+<li><strong>命令执行</strong>：在操作系统的命令行界面中进行，不同的操作系统有不同的命令集。例如，在 Windows 系统中使用 CMD 或 PowerShell，在 Linux 和 macOS 系统中使用 Bash 等。命令执行是直接与操作系统交互，对系统进行控制。</li>
+</ul>
+<p>一般来说代码执行比较复杂和灵活</p>
+<h4 id="二者之间的联系"><a href="#二者之间的联系" class="headerlink" title="二者之间的联系"></a>二者之间的联系</h4><ul>
+<li>代码可以调用系统命令。在很多编程语言中，都提供了执行系统命令的接口。例如，在 Python 中可以使用<code>os.system()</code>或<code>subprocess</code>模块来执行系统命令。这样可以在代码中利用系统命令的功能，完成一些代码本身难以实现的任务。</li>
+<li>命令脚本中也可以调用代码。例如，在 Shell 脚本中可以调用 Python 脚本或其他编程语言的程序，实现自动化的任务处理</li>
+</ul>
+<p>也就是说两着之间可以一起使用在平时做题时见到的代码基本上都是既有代码执行也有命令执行</p>
+<h1 id="一些在PHP的命令执行相关函数"><a href="#一些在PHP的命令执行相关函数" class="headerlink" title="一些在PHP的命令执行相关函数"></a>一些在PHP的命令执行相关函数</h1><table>
+<thead>
+<tr>
+<th>system()</th>
+<th>执行外部程序，成功则返回命令输出的最后一行，失败则返回 false。<strong>显示输出</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>exec()</td>
+<td>执行一个外部程序，<strong>返回</strong>命令执行结果的最后一行内容</td>
+<td></td>
+</tr>
+<tr>
+<td>shell_exec()</td>
+<td>通过 shell 执行命令并将完整的输出以字符串的方式<strong>返回</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&#96;&#96;反引号</td>
+<td>将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，与函数 shell_exec() 相同</td>
+<td></td>
+</tr>
+<tr>
+<td>passthru()</td>
+<td>执行外部程序并且<strong>显示原始输出</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>pcntl_exec</td>
+<td>在当前进程空间执行指定程序</td>
+<td></td>
+</tr>
+<tr>
+<td>popen()</td>
+<td>执行一个外部命令，并返回一个文件指针，通过这个指针可以读取命令的输出或者向命令输入数据</td>
+<td></td>
+</tr>
+<tr>
+<td>proc_open()</td>
+<td>执行一个命令，并且打开用来输入&#x2F;输出的文件指针。</td>
+<td></td>
+</tr>
+<tr>
+<td>pcntl_exec()</td>
+<td>主要用于在当前进程的上下文中执行指定的程序，替换当前进程的映像 成功时就直接进行新的进程与返回值失败是显示false</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="1-system"><a href="#1-system" class="headerlink" title="1. system()"></a>1. <code>system()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span>|<span class="literal">false</span> <span class="title function_ invoke__">system</span> ( <span class="keyword">string</span> <span class="variable">$command</span> [, <span class="keyword">int</span> &amp;<span class="variable">$return_var</span> ] )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="string">&#x27;whoami&#x27;</span>); <span class="comment">// root</span></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;whoami&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>参数</p>
+<p>：</p>
+<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+<li><code>$return_var</code>：可选，用来存储命令执行后的返回状态码。</li>
+</ul>
+</li>
+<li><p>返回值</p>
+<p>：</p>
+<ul>
+<li>若命令执行成功，返回命令输出的最后一行。</li>
+<li>若执行失败，返回 <code>false</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-exec"><a href="#2-exec" class="headerlink" title="2. exec()"></a>2. <code>exec()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span>|<span class="keyword">array</span>|<span class="literal">false</span> <span class="title function_ invoke__">exec</span> ( <span class="keyword">string</span> <span class="variable">$command</span> [, <span class="keyword">array</span> &amp;<span class="variable">$output</span> [, <span class="keyword">int</span> &amp;<span class="variable">$return_var</span> ]] )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&#x27;whoami&#x27;</span>); <span class="comment">// 无任何输出</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">exec</span>(<span class="string">&#x27;whoami&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+<li><code>$output</code>：可选，若提供此参数，命令执行结果的每一行会作为一个元素存入该数组。</li>
+<li><code>$return_var</code>：可选，用来存储命令执行后的返回状态码。</li>
+</ul>
+</li>
+<li>返回值<ul>
+<li>成功时返回命令执行结果的最后一行内容。</li>
+<li>失败时返回 <code>false</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-shell-exec"><a href="#3-shell-exec" class="headerlink" title="3. shell_exec()"></a>3. <code>shell_exec()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span>|<span class="literal">null</span> <span class="title function_ invoke__">shell_exec</span> ( <span class="keyword">string</span> <span class="variable">$command</span> )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">shell_exec</span>(<span class="string">&#x27;whoami&#x27;</span>); <span class="comment">// 无任何输出</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">shell_exec</span>(<span class="string">&#x27;whoami&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>参数<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+</ul>
+</li>
+<li>返回值<ul>
+<li>成功时返回命令的完整输出字符串。</li>
+<li>若执行失败，返回 <code>null</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-反引号"><a href="#4-反引号" class="headerlink" title="4. 反引号 &#96;&#96;"></a>4. 反引号 &#96;&#96;</h3><p>反引号并非函数，而是一种语法结构，使用方式为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$output</span> = `your_command_here`;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`whoami`; <span class="comment">// 无任何输出</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(`whoami`);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li>反引号内为要执行的系统命令。</li>
+</ul>
+</li>
+<li><strong>返回值</strong>：返回命令的完整输出字符串。</li>
+</ul>
+<h3 id="5-passthru"><a href="#5-passthru" class="headerlink" title="5. passthru()"></a>5. <code>passthru()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_ invoke__">passthru</span> ( <span class="keyword">string</span> <span class="variable">$command</span> [, <span class="keyword">int</span> &amp;<span class="variable">$return_var</span> ] )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">passthru</span>(<span class="string">&#x27;whoami&#x27;</span>); <span class="comment">// root</span></span><br><span class="line"><span class="title function_ invoke__">var_dump</span>(<span class="title function_ invoke__">passthru</span>(<span class="string">&#x27;whoami&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+<li><code>$return_var</code>：可选，用来存储命令执行后的返回状态码。</li>
+</ul>
+</li>
+<li><strong>返回值</strong>：无返回值，直接将命令的原始输出显示。</li>
+</ul>
+<h3 id="6-pcntl-exec"><a href="#6-pcntl-exec" class="headerlink" title="6. pcntl_exec()"></a>6. <code>pcntl_exec()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> <span class="title function_ invoke__">pcntl_exec</span> ( <span class="keyword">string</span> <span class="variable">$path</span> [, <span class="keyword">array</span> <span class="variable">$args</span> = [] [, <span class="keyword">array</span> <span class="variable">$envs</span> = [] ]] )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">pcntl_exec</span>(<span class="string">&quot;/bin/bash&quot;</span>,<span class="keyword">array</span>(<span class="variable">$_POST</span>[<span class="string">&quot;cmd&quot;</span>]));</span><br><span class="line"><span class="title function_ invoke__">pcntl_exec</span>(<span class="string">&quot;/bin/bash&quot;</span>,<span class="keyword">array</span>(<span class="string">&#x27;whoami&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>$path</code>：必需，要执行的程序的路径。</li>
+<li><code>$args</code>：可选，传递给程序的参数数组。</li>
+<li><code>$envs</code>：可选，传递给程序的环境变量数组。</li>
+</ul>
+</li>
+<li>返回值<ul>
+<li>若执行成功，不会返回，因为当前进程会被新程序替换。</li>
+<li>若执行失败，返回 <code>false</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-popen"><a href="#7-popen" class="headerlink" title="7. popen()"></a>7. <code>popen()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resource|<span class="literal">false</span> <span class="title function_ invoke__">popen</span> ( <span class="keyword">string</span> <span class="variable">$command</span> , <span class="keyword">string</span> <span class="variable">$mode</span> )</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+<li><code>$mode</code>：必需，指定管道的打开模式，<code>&#39;r&#39;</code> 表示只读，<code>&#39;w&#39;</code> 表示只写。</li>
+</ul>
+</li>
+<li>返回值<ul>
+<li>成功时返回一个文件指针资源。</li>
+<li>失败时返回 <code>false</code>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="8-proc-open"><a href="#8-proc-open" class="headerlink" title="8. proc_open()"></a>8. <code>proc_open()</code></h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resource|<span class="literal">false</span> <span class="title function_ invoke__">proc_open</span> ( <span class="keyword">string</span> <span class="variable">$command</span> , <span class="keyword">array</span> <span class="variable">$descriptorspec</span> , <span class="keyword">array</span> &amp;<span class="variable">$pipes</span> [, <span class="keyword">string</span> <span class="variable">$cwd</span> = <span class="literal">null</span> [, <span class="keyword">array</span> <span class="variable">$env</span> = <span class="literal">null</span> [, <span class="keyword">array</span> <span class="variable">$other_options</span> = <span class="literal">null</span> ]]] )</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$descriptorspec</span> = <span class="keyword">array</span>(</span><br><span class="line">   <span class="number">0</span> =&gt; <span class="keyword">array</span>(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;r&quot;</span>),  <span class="comment">// 标准输入，子进程从此管道中读取数据</span></span><br><span class="line">   <span class="number">1</span> =&gt; <span class="keyword">array</span>(<span class="string">&quot;pipe&quot;</span>, <span class="string">&quot;w&quot;</span>),  <span class="comment">// 标准输出，子进程向此管道中写入数据</span></span><br><span class="line">   <span class="number">2</span> =&gt; <span class="keyword">array</span>(<span class="string">&quot;file&quot;</span>, <span class="string">&quot;/tmp/error-output.txt&quot;</span>, <span class="string">&quot;a&quot;</span>) <span class="comment">// 标准错误，写入到一个文件</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">proc_open</span>(<span class="string">&#x27;whoami&#x27;</span>, <span class="variable">$descriptorspec</span>, <span class="variable">$pipes</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>参数<ul>
+<li><code>$command</code>：必需，要执行的系统命令。</li>
+<li><code>$descriptorspec</code>：必需，指定进程的输入、输出文件描述符。</li>
+<li><code>$pipes</code>：必需，用于存储与进程通信的文件指针数组。</li>
+<li><code>$cwd</code>：可选，进程的工作目录。</li>
+<li><code>$env</code>：可选，传递给进程的环境变量数组。</li>
+<li><code>$other_options</code>：可选，其他选项数组。</li>
+</ul>
+</li>
+<li>返回值<ul>
+<li>成功时返回一个进程资源句柄。</li>
+<li>失败时返回 <code>false</code>。</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="http://example.com">fzh</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/">http://example.com/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/04/01/%E7%AE%80%E5%8D%95%E7%9A%84%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">信息泄露![](D:\我的图片\屏幕截图 2025-04-01 190829.png) 信息泄露时一些可怀疑文件·版本管理软件泄露— .git.git是 Git 版本控制系统使用的隐藏文件夹，它包含了项目的完整版本历史记录、提交记录、分支信息等 推荐工具：githack — .svn.svn是 Subversion（SVN）版本控制系统使用的隐藏文件夹，同样包含了项目的版本控制信息 ——如果这些文件夹被意外地部署到生产环境中，并且没有进行适当的访问控制，攻击者就可以通过访问这些文件夹来获取项目的源代码、历史记录等敏感信息。 推荐工具：dvcs-ripper ·备份文件泄露— index.php.swp.swp 文件是 Vim 编辑器在编辑文件时生成的临时文件，用于保存编辑过程中的中间状态。 如果编辑过程中 Vim 意外退出（如由于网络中断、服务器重启等原因），.swp 文件可能会保留下来。 如果这个文件被部署到生产环境中，并且包含了敏感信息（如数据库密码、API 密钥等），就可能导致信息泄露。 —  index.php~index.php~ 文件通常是某些文本编辑器（如...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">fzh</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">22</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/fzh879" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:etrea@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87"><span class="toc-number">1.</span> <span class="toc-text">RCE命令注入—一些绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.</span> <span class="toc-text">基础绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%A9%BA%E6%A0%BC%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">1.空格绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%A4%A7%E6%8B%AC%E5%8F%B7%E6%89%A9%E5%B1%95"><span class="toc-number">1.0.1.1.1.</span> <span class="toc-text">1.大括号扩展{}</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-IFS%E4%BB%A3%E6%9B%BF%E7%A9%BA%E6%A0%BC%EF%BC%88-IF-9-IFS-IFS%E8%BF%99%E4%B8%89%E9%83%BD%E5%8F%AF%E4%BB%A5%EF%BC%89"><span class="toc-number">1.0.1.1.2.</span> <span class="toc-text">2.$IFS代替空格（$IF$9,${IFS},$IFS这三都可以）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E9%87%8D%E5%AE%9A%E5%90%91%E5%AD%97%E7%AC%A6"><span class="toc-number">1.0.1.1.3.</span> <span class="toc-text">3.重定向字符&lt;(输入重定向)  &lt;&gt;(读写重定向)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-09%E7%BB%95%E8%BF%87%EF%BC%88%E7%9B%B8%E5%BD%93%E4%BA%8ETab%E9%94%AE%EF%BC%89"><span class="toc-number">1.0.1.1.4.</span> <span class="toc-text">4.%09绕过（相当于Tab键）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%BB%95%E8%BF%87%E9%BB%91%E5%90%8D%E5%8D%95"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">2.绕过黑名单</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E5%A4%A7%E5%B0%8F%E5%86%99%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.1.</span> <span class="toc-text">1.大小写绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%8B%BC%E6%8E%A5%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.2.</span> <span class="toc-text">2.拼接绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.3.</span> <span class="toc-text">3.编码绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E5%8D%95%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.4.</span> <span class="toc-text">4.单引号绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E5%8F%8C%E5%BC%95%E5%8F%B7%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.5.</span> <span class="toc-text">5.双引号绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E5%8F%8D%E6%96%9C%E7%BA%BF%E7%BB%95%E8%BF%87-%E8%BD%AC%E4%B9%89%E5%8D%B1%E9%99%A9%E5%AD%97%E7%AC%A6"><span class="toc-number">1.0.1.2.6.</span> <span class="toc-text">6.反斜线绕过(\转义危险字符)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E5%8F%8D%E5%BC%95%E5%8F%B7-%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.2.7.</span> <span class="toc-text">6.反引号&#96;绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7-%E4%BD%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E7%9A%84%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F-%E5%92%8C"><span class="toc-number">1.0.1.2.8.</span> <span class="toc-text">7.位置参数的特殊变量$@和$*</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%9B%AE%E5%BD%95%E5%88%86%E9%9A%94%E7%AC%A6-%E8%BF%87%E6%BB%A4%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">3.目录分隔符( &#x2F; )过滤绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E5%88%86%E5%8F%B7"><span class="toc-number">1.0.1.3.1.</span> <span class="toc-text">1.直接使用分号;</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E5%BD%93-%E8%A2%AB%E8%BF%87%E6%BB%A4%E6%97%B6%E5%8F%AF%E4%BB%A5%E5%B0%9D%E8%AF%95%E4%BD%BF%E7%94%A8%E7%BC%96%E7%A0%81%E8%BF%9B%E8%A1%8C%E7%BB%95%E8%BF%87"><span class="toc-number">1.0.1.3.2.</span> <span class="toc-text">2.当&#x2F;被过滤时可以尝试使用编码进行绕过</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-cat-HOME-0-1-etc-HOME-0-1-passwd"><span class="toc-number">1.0.1.3.3.</span> <span class="toc-text">3.cat ${HOME:0:1}etc${HOME:0:1}passwd</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-cat-echo-tr-0-1-etc-echo-tr-0-1-passwd-cat-ect-passwd"><span class="toc-number">1.0.1.3.4.</span> <span class="toc-text">4.cat $(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)etc$(echo . | tr &#39;!-0&#39; &#39;&quot;-1&#39;)passwd      &#x2F;&#x2F;cat  &#x2F;ect&#x2F;passwd</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%95%E8%BF%87%E7%AE%A1%E9%81%93%E7%AC%A6"><span class="toc-number">1.0.2.</span> <span class="toc-text">绕过管道符|</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">1. &lt;&lt;&lt; 操作符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-base64-d-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">2. base64 -d 命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-bash-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">3. bash 命令</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E8%81%94%E7%B3%BB"><span class="toc-number">2.</span> <span class="toc-text">代码执行与命令执行的区别和联系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">执行环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB"><span class="toc-number">2.0.0.2.</span> <span class="toc-text">二者之间的联系</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%9C%A8PHP%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">一些在PHP的命令执行相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-system"><span class="toc-number">3.0.1.</span> <span class="toc-text">1. system()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-exec"><span class="toc-number">3.0.2.</span> <span class="toc-text">2. exec()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-shell-exec"><span class="toc-number">3.0.3.</span> <span class="toc-text">3. shell_exec()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%8F%8D%E5%BC%95%E5%8F%B7"><span class="toc-number">3.0.4.</span> <span class="toc-text">4. 反引号 &#96;&#96;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-passthru"><span class="toc-number">3.0.5.</span> <span class="toc-text">5. passthru()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-pcntl-exec"><span class="toc-number">3.0.6.</span> <span class="toc-text">6. pcntl_exec()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-popen"><span class="toc-number">3.0.7.</span> <span class="toc-text">7. popen()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-proc-open"><span class="toc-number">3.0.8.</span> <span class="toc-text">8. proc_open()</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/01/RCE%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E2%80%94%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87/" title="Untitled">Untitled</a><time datetime="2025-04-01T11:48:48.709Z" title="Created 2025-04-01 19:48:48">2025-04-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/01/%E7%AE%80%E5%8D%95%E7%9A%84%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2/" title="Untitled">Untitled</a><time datetime="2025-04-01T11:48:47.974Z" title="Created 2025-04-01 19:48:47">2025-04-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/01/JAVA%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9/" title="Untitled">Untitled</a><time datetime="2025-04-01T10:47:52.246Z" title="Created 2025-04-01 18:47:52">2025-04-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/31/Linux%20%E5%B8%B8%E8%A7%81%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4/" title="Untitled">Untitled</a><time datetime="2025-03-31T10:39:14.028Z" title="Created 2025-03-31 18:39:14">2025-03-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/31/%5B%E7%BD%91%E9%BC%8E%E6%9D%AF%202020%20%E6%9C%B1%E9%9B%80%E7%BB%84%5Dphpweb1/" title="Untitled">Untitled</a><time datetime="2025-03-31T10:20:01.436Z" title="Created 2025-03-31 18:20:01">2025-03-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By fzh</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div><div class="footer_custom_text">wdnmd</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Toggle Between Traditional and Simplified Chinese">繁</button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
